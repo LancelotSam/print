@@ -2,28 +2,18 @@
 #include <stdio.h>
 #include <stdarg.h>
 /**
- * _printf - function that produces output according to a format.
- *
+ * _printf - this is the main function
+ * It produces output according to a format.
  * @format: Parameter is a character string
- *
  * @...: variety of arguments
- * 
  * Return: Always number of characters printed (success)
  */
 int _printf(const char *format, ...)
 {
-	int count;
-	int c;
+	int count, c, num;
 	char *str;
-	int num;
-	int digits;
-	int temp;
-	int i;
-	int j;
-	int digit;
-	int divisor;
-
 	va_list arg;
+
 	va_start(arg, format);
 	while (*format)
 	{
@@ -52,41 +42,19 @@ int _printf(const char *format, ...)
 					}
 					break;
 				case 'd':
-				case 'i':
-				case '%':
+				case 'i':				
 					num = va_arg(arg, int);
-					if (num < 0)
-					{
-						_putchar('-');
-						count++;
-						num = -num;
-					}
-					digits = 0;
-					temp = num;
-					do
-					{
-						temp /= 10;
-						digits++;
-					}
-					while (temp);
-					for (i = digits - 1; i >= 0; i--)
-					{
-						divisor = 1;
-						for (j = 0; j < i; j++)
-						{
-							divisor *= 10;
-						}
-						digit = num / divisor;
-						_putchar('0' + digit);
-						count++;
-						num -= digit * divisor;
-					}
+					print_integer(num);
+					count++;
 					break;
+				case '%':
 					_putchar('%');
 					count++;
 					break;
 				default:
-					break;
+					_putchar('%');
+					_putchar(*format);
+					count++;
 			}
 		}
 		format++;
