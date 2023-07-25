@@ -10,19 +10,19 @@
  */
 void print_buff(char buffer[], int *buff_ind)
 {
-        if (*buff_ind > 0)
-                write(1, &buffer[0], *buffer_ind);
-        *buff_ind = 0; /*resets it for the next use*/
+	if (*buff_ind > 0)
+		write(1, &buffer[0], *buff_ind);
+	*buff_ind = 0; /*resets it for the next use*/
 }
 
 /**
- * my_putchar-this is the main function
+ * _putchar-this is the main function
  *
  * It handles individual characters
  * @c:the character to be put
  * Return: integer with the address of the address of c
  */
-int my_putchar(char c)
+int _putchar(char c)
 {
-        return write(1, &c, 1);/*Writes the character to stdio*/
+	return write(1, &c, 1);/*Writes the character to stdio*/
 }

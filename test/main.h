@@ -8,7 +8,8 @@
 #define BUFF_SIZE 1024/*where write output is to be stored*/
 
 int _printf(const char *format, ...);
-int my_putchar(char c);
+int _putchar(char c);
 void print_buff(char buffer[], int *buff_ind);
+int print_integer(int value);
 
 #endif
