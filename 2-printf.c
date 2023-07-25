@@ -13,6 +13,7 @@ int _printf(const char *format, ...)
 	int count, c, num;
 	char *str;
 	va_list arg;
+	void *ptr;
 
 	va_start(arg, format);
 	while (*format)
@@ -45,6 +46,11 @@ int _printf(const char *format, ...)
 				case 'i':				
 					num = va_arg(arg, int);
 					print_integer(num);
+					count++;
+					break;
+				case 'p':
+					ptr = va_arg(arg, void *);
+					print_pointer(ptr);
 					count++;
 					break;
 				case '%':

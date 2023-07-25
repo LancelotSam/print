@@ -86,14 +86,16 @@ void print_pointer(const char *format, ...)
 	ptr_val = (uintptr_t)pointer;
 	/*calc hexa vals required for pointer*/
 	num_hex_digits = sizeof(uintptr_t) * 2;
+	putchar('0');
+	putchar('x');
 	/*buff_len = snprintf(buffer, sizeof(buffer), "%p", pointer);*/
 	for (i = num_hex_digits - 1; i >= 0; i--)
 	{
 		extract_dig = (ptr_val >> (i * 4)) & 0xF; /*shifting each digit by its size*/
 		putchar(HEX_DIGITS[extract_dig]);
 	}
+	putchar('\n');
 	/*write(1, buffer, buff_len);*/
 	/*_putchar not allowed because it is nested*/
-	putchar('\n');
 	va_end(arg);
 }
