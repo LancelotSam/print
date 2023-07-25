@@ -19,7 +19,7 @@ int _printf(const char *format, ...)
 	{
 		if (*format != '%')
 		{
-			putchar(*format);
+			_putchar(*format);
 			count++;
 		}
 		else
@@ -29,29 +29,33 @@ int _printf(const char *format, ...)
 			{
 				case 'c':
 					c = va_arg(arg, int);
-					putchar(c);
+					_putchar(c);
 					count++;
 					break;
 				case 's':
 					str = va_arg(arg, char*);
 					while (*str)
 					{
-						putchar(*str);
+						_putchar(*str);
 						str++;
 						count++;
 					}
 					break;
 				case 'd':
-				case 'i':
-				case '%':
+				case 'i':				
 					num = va_arg(arg, int);
 					print_integer(num);
 					count++;
-			}
 					break;
-					putchar('%');
+				case '%':
+					_putchar('%');
 					count++;
 					break;
+				default:
+					_putchar('%');
+					_putchar(*format);
+					count++;
+			}
 		}
 		format++;
 	}
