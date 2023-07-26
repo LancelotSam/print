@@ -10,7 +10,7 @@
  * @value: the value of the input
  * Return:an integer
  */
-int print_integer(int value)
+int print_int(int value)
 {
 	char buffer[BUFF_SIZE];
 	int neg = 0 ,digits = 0 , i = 0;
@@ -99,7 +99,6 @@ void print_pointer(const char *format, ...)
 	va_end(arg);
 }
 
-/**PRINT BUFFER*/
 /**
  * print_buff-this is the main function
  * It reduces the need to call write
@@ -107,11 +106,11 @@ void print_pointer(const char *format, ...)
  * @buff_ind:a pointer to the start position of buffer
  * Return:void
  */
-void print_buff(char buffer[], int *buff_ind)
+void print_buff(char buffer[], int *buff_index)
 {
-	if (*buff_ind > 0)
-		write(1, &buffer[0], *buff_ind);
-	*buff_ind = 0; /*resets it for the next use*/
+	if (*buff_index > 0)
+		write(1, &buffer[0], *buff_index);
+	*buff_index = 0; /*resets it for the next use*/
 }
 
 /**
@@ -120,64 +119,212 @@ void print_buff(char buffer[], int *buff_ind)
  * @format: Parameter is a character string
  * @...: variety of arguments
  * Return: Always number of characters printed (success)
- */
-int _printf(const char *format, ...)
-{
-	int count, c, num;
-	char *str;
-	va_list arg;
-	void *ptr;
 
-	va_start(arg, format);
-	while (*format)
-	{
-		if (*format != '%')
-		{
-			_putchar(*format);
-			count++;
-		}
-		else
-		{
-			format++;
-			switch (*format)
+ int _printf(const char *format, ...)
+ {
+ int count, c, num;
+ char *str;
+ va_list arg;
+ void *ptr;
+
+ va_start(arg, format);
+ while (*format)
+ {
+ if (*format != '%')
+ {
+ _putchar(*format);
+ count++;
+ }
+ else
+ {
+ format++;
+ switch (*format)
+ {
+ case 'c':
+ c = va_arg(arg, int);
+ _putchar(c);
+ count++;
+ break;
+ case 's':
+ str = va_arg(arg, char*);
+ while (*str)
+ {
+ _putchar(*str);
+ str++;
+ count++;
+ }
+ break;
+ case 'd':
+ case 'i':
+ num = va_arg(arg, int);
+ print_integer(num);
+ count++;
+ break;
+ case 'p':
+ ptr = va_arg(arg, void *);
+ print_pointer(ptr);
+ count++;
+ break;
+ case '%':
+ _putchar('%');
+ count++;
+ break;
+ default:
+ _putchar('%');
+ _putchar(*format);
+ count++;
+ }
+ }
+ format++;
+ }
+ va_end(arg);
+ return (count);
+ }
+
+ int _printf(const char *format, ...)
+ {
+ va_list ap;
+int counter = 0, printd = 0, buff_index = 0;
+int value;
+int c;
+void *ptr;
+char buffer[BUFF_SIZE];*defined in macro*/
+/**
+ *
+ va_start(ap, format);
+
+ while (*format)
+ {
+ if (*format == '%')  start of a conversion specifiers*/
+/*{
+  format++; *next character after '%'*/
+
+/*			if (*format == '%') * '%%' */
+/*			{
+			buffer[buff_index++] = '%';
+			if (buff_index == BUFF_SIZE)
 			{
-				case 'c':
-					c = va_arg(arg, int);
-					_putchar(c);
-					count++;
-					break;
-				case 's':
-					str = va_arg(arg, char*);
-					while (*str)
-					{
-						_putchar(*str);
-						str++;
-						count++;
-					}
-					break;
-				case 'd':
-				case 'i':
-					num = va_arg(arg, int);
-					print_integer(num);
-					count++;
-					break;
-				case 'p':
-					ptr = va_arg(arg, void *);
-					print_pointer(ptr);
-					count++;
-					break;
-				case '%':
-					_putchar('%');
-					count++;
-					break;
-				default:
-					_putchar('%');
-					_putchar(*format);
-					count++;
+			print_buff(buffer, &buff_index);
+			counter += buff_index;
 			}
+			}
+			else if (*format == 'c') * '%c' */
+/*{
+  c = va_arg(ap, int);
+  buffer[buff_index++] = c;
+  if (buff_index == BUFF_SIZE)
+  {
+  print_buff(buffer, &buff_index);
+  counter += buff_index;
+  }
+  }
+  else if (*format == 's') * '%s'*/
+/*	{
+	char *str = va_arg(ap, char *);
+	while (*str) * Iterate through the string*/
+/*		{
+		buffer[buff_index++] = *str;
+		str++;
+		if (buff_index == BUFF_SIZE)
+		{
+		print_buff(buffer, &buff_index);
+		counter += buff_index;
 		}
-		format++;
+		}
+		}
+		else if (*format == 'd' || *format == 'i') *'%d' or '%i'*/
+/*	{
+	value = va_arg(ap, int);
+	printd = print_int(value);
+	counter += printd;
 	}
-	va_end(arg);
-	return (count);
+	else if (*format == 'p') * '%p'*/
+/*	{
+	ptr = va_arg(ap, void *);
+	print_pointer(ptr);
+	counter++;
+	}
+	else *For Regular characters not needing conversion specifiers*/
+/*	{
+	buffer[buff_index++] = *format;
+	if (buff_index == BUFF_SIZE)
+	{
+	print_buff(buffer, &buff_index);
+	counter += buff_index;
+	}
+	}
+
+	format++; *next character in the format string*/
+/*	}
+	print_buff(buffer, &buff_index);
+	counter += buff_index;
+	}
+	va_end(ap); * Clears argument list*/
+/*
+   return (counter);  returns printed chars
+   }
+   */
+int _printf(const char *format, ...) {
+	va_list ap;
+	int counter = 0, buff_index = 0;
+	int value;
+	int c;
+	int printd;
+	void *ptr;
+	char buffer[BUFF_SIZE];
+
+	va_start(ap, format);
+
+	while (*format) {
+		if (*format == '%') {
+			format++; /* Move past '%' */
+
+			if (*format == '%') {
+				buffer[buff_index++] = '%';
+			} else if (*format == 'c') {
+				c = va_arg(ap, int);
+				buffer[buff_index++] = c;
+			} else if (*format == 's') {
+				char *str = va_arg(ap, char *);
+				while (*str) {
+					buffer[buff_index++] = *str;
+					str++;
+				}
+			} else if (*format == 'd' || *format == 'i') {
+				value = va_arg(ap, int);
+				printd = print_int(value);
+				counter += printd;
+			} else if (*format == 'p') {
+				ptr = va_arg(ap, void *);
+				print_pointer(ptr);
+			} else {
+				buffer[buff_index++] = *format;
+			}
+
+			format++; /* Move to the next character after the conversion specifier */
+
+			if (buff_index == BUFF_SIZE) {
+				print_buff(buffer, &buff_index);
+				counter += buff_index;
+			}
+		} else {
+			buffer[buff_index++] = *format;
+
+			if (buff_index == BUFF_SIZE) {
+				print_buff(buffer, &buff_index);
+				counter += buff_index;
+			}
+
+			format++; /* Move to the next character in the format string */
+		}
+	}
+
+	/* Print any remaining characters in the buffer*/
+	print_buff(buffer, &buff_index);
+	counter += buff_index;
+
+	va_end(ap); /* Clears argument list */
+
+	return (counter); /* Return the total number of printed characters */
 }
+
